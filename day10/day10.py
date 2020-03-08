@@ -1,4 +1,5 @@
 import math
+
 #
 # part 1
 #
@@ -56,8 +57,9 @@ f.close()
 """
 
 
-def polar(x,y):
-    return math.hypot(x,y),math.degrees(math.atan2(y,x))+90
+def polar(x, y):
+    return math.hypot(x, y), math.degrees(math.atan2(y, x)) + 90
+
 
 #
 # part 2
@@ -71,12 +73,11 @@ height = 0
 for line in f.readlines():
     x = 0
     for char in line:
-        if(char == "#"):
+        if (char == "#"):
             astroidLocations.append([x, height])
         x += 1
     width = x
     height += 1
-
 
 max = -1
 bestAstroid = ()
@@ -84,20 +85,20 @@ for stationCandidate in astroidLocations:
     relativeAstroids = []
     polarAstroids = []
     for i in range(0, len(astroidLocations)):
-        
+
         # make all astroids relative to the candidate
-        relativeAstroids.append([astroidLocations[i][0] -stationCandidate[0],astroidLocations[i][1] -stationCandidate[1]])
+        relativeAstroids.append(
+            [astroidLocations[i][0] - stationCandidate[0], astroidLocations[i][1] - stationCandidate[1]])
 
         # convert to positive y up and negative down
-        relativeAstroids[i] = relativeAstroids[i][0], relativeAstroids[i][1] 
+        relativeAstroids[i] = relativeAstroids[i][0], relativeAstroids[i][1]
 
-        #convert to polar coords
+        # convert to polar coords
         polarAstroids.append(polar(relativeAstroids[i][0], relativeAstroids[i][1]))
 
         # convert - degrees into 
-        if(polarAstroids[i][1] < 0):
+        if (polarAstroids[i][1] < 0):
             polarAstroids[i] = polarAstroids[i][0], abs(polarAstroids[i][1]) + 180
-        
 
     # remove this astroid
     polarAstroids.remove((0.0, 90.0))
@@ -108,8 +109,8 @@ for stationCandidate in astroidLocations:
     lastDegrees = 361
     l = len(sortedPolarAstroids)
     i = 0
-    while(i < l):
-        if(math.isclose(sortedPolarAstroids[i][1], lastDegrees)):
+    while (i < l):
+        if (math.isclose(sortedPolarAstroids[i][1], lastDegrees)):
             lastDegrees = sortedPolarAstroids[i][1]
             l -= 1
             sortedPolarAstroids.remove(sortedPolarAstroids[i])
@@ -117,10 +118,10 @@ for stationCandidate in astroidLocations:
             lastDegrees = sortedPolarAstroids[i][1]
             i += 1
 
-    if(len(sortedPolarAstroids) > max):
+    if (len(sortedPolarAstroids) > max):
         bestAstroid = stationCandidate
         max = len(sortedPolarAstroids)
-        
+
 print(str(bestAstroid) + ": " + str(max))
 
 f.close()
