@@ -110,15 +110,15 @@ def compute(self, inputPath):
             )
             program.inc_instruction_pointer(4)
 
-        elif op_code == OpCode.input:
-            data[data[instruction_pointer + 1]] = input[input_index]  # Cycle through inputs
-            # inputIndex += 1;
-            program.inc_instruction_pointer(2)
+        # elif op_code == OpCode.input:
+        #     data[data[instruction_pointer + 1]] = input[input_index]  # Cycle through inputs
+        #     # inputIndex += 1;
+        #     program.inc_instruction_pointer(2)
 
         elif op_code == OpCode.output:
-            print(getDataVal(data, paramMode1, instruction_pointer + 1, relative_base))
-            output.append(getDataVal(data, paramMode1, instruction_pointer + 1, relative_base))
-            program.inc_instruction_pointer(4)
+            print(program.get_param(1))
+            # output.append(getDataVal(data, paramMode1, instruction_pointer + 1, relative_base))
+            program.inc_instruction_pointer(2)
 
         elif op_code == OpCode.jump_if_true:
             if program.get_param(1) != 0:
