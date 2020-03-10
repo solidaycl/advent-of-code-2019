@@ -39,6 +39,7 @@ class IntcodeDAO:
         # add memory 100 times the size of the program
         for i in range(0, len(self.data) * 100):
             self.data.append(0)
+        f.close()
 
     def get(self, address, mode = Mode.immediate):
         if mode == Mode.immediate:
@@ -82,8 +83,10 @@ class IntcodeDAO:
         self.instruction_pointer = num
 
     def inc_relative_base_pointer(self, num):
-        self.instruction_pointer += num
+        self.relative_base_pointer += num
 
+    def set_relative_base_pointer(self, num):
+        self.relative_base_pointer = num
 
 def compute(self, inputPath):
 
@@ -114,7 +117,6 @@ def compute(self, inputPath):
         #     data[data[instruction_pointer + 1]] = input[input_index]  # Cycle through inputs
         #     # inputIndex += 1;
         #     program.inc_instruction_pointer(2)
-
         elif op_code == OpCode.output:
             print(program.get_param(1))
             # output.append(getDataVal(data, paramMode1, instruction_pointer + 1, relative_base))
@@ -133,26 +135,24 @@ def compute(self, inputPath):
                 program.inc_instruction_pointer(3)
 
         elif op_code == OpCode.less_than:
-            if getDataVal(data, paramMode1, instruction_pointer + 1, relative_base) < getDataVal(data, paramMode2, instruction_pointer + 2, relative_base):
-                data[data[instruction_pointer + 3]] = 1
+            if program.get_param(1) < program.get_param(2):
+                program.set(program.get_param(3), 1)
             else:
-                data[data[instruction_pointer + 3]] = 0
+                program.set(program.get_param(3), 0)
             program.inc_instruction_pointer(4)
 
         elif op_code == OpCode.equals:
-            if getDataVal(data, paramMode1, instruction_pointer + 1, relative_base) == \
-                    getDataVal(data, paramMode2, instruction_pointer + 2, relative_base):
-                data[data[instruction_pointer + 3]] = 1
+            if program.get_param(1) == program.get_param(2):
+                program.set(program.get_param(3), 1)
             else:
-                data[data[instruction_pointer + 3]] = 0
+                program.set(program.get_param(3), 0)
             program.inc_instruction_pointer(4)
 
         elif op_code == 9:
-            print(str(relative_base) + " + " + str(getDataVal(data, paramMode1, instruction_pointer + 1, relative_base)))
-            relative_base += int(getDataVal(data, paramMode1, instruction_pointer + 1, relative_base))
+            print("adjusting base pointer")
+            program.inc_relative_base_pointer(program.get_param(1))
             program.inc_instruction_pointer(2)
 
-    f.close()
     print("returning none from end")
     return None
 
