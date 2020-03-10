@@ -41,23 +41,21 @@ class IntcodeDAO:
             self.data.append(0)
         f.close()
 
-    def get(self, address, mode = Mode.immediate):
+    def get(self, address, mode=Mode.immediate):
         if mode == Mode.immediate:
-            return self.get(index)
+            return self.data[address]
         elif mode == Mode.position:
             return self.get(self.get(address))
         elif mode == Mode.relative_position:
             return self.get(self.get(self.relative_base_pointer))
 
     def set(self, address, val):
-            self.data[address] = val
+        self.data[address] = val
 
     # get the value of the parameter number specified, including modes
     def get_param(self, param_num):
 
         instruction = str(data[instruction_pointer]).zfill(5)
-        opcode = int(instruction[-2:])
-
         param1Mode = int(instruction[2])
         param2Mode = int(instruction[1])
         param3Mode = int(instruction[0])
@@ -70,7 +68,7 @@ class IntcodeDAO:
             return self.get(self.instruction_pointer + 3, param3Mode)
 
     def get_op_code(self):
-        instruction = str(get(self.instruction_pointer)).zfill(5)
+        instruction = str(self.get(self.instruction_pointer)).zfill(5)
         return int(instruction[-2:])
 
     def get_instruction_mode(self):
@@ -88,13 +86,16 @@ class IntcodeDAO:
     def set_relative_base_pointer(self, num):
         self.relative_base_pointer = num
 
-def compute(self, inputPath):
 
-    program = IntcodeDAO(inputPath)
+def compute(input_path):
 
-    while instruction_pointer < len(data):
+    program = IntcodeDAO(input_path)
+
+    while True:
 
         op_code = program.get_op_code()
+
+        print(str(op_code))
 
         if op_code == OpCode.halt:
             return 0    # output
